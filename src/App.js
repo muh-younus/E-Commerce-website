@@ -5,7 +5,8 @@ import SubNavbar from './components/SubNavbar';
 import HeroSection  from './components/HeroSection'; 
 import ProductSection from "./components/ProductSection"
 import ProductSection1 from './components/ProductSection1';
-
+import Slider from './components/Slider';
+import ProductSection3 from './components/ProductSection2';
 
 function App() {
   return (
@@ -18,9 +19,9 @@ function App() {
         <main className="container mx-auto px-4 py-8">
         <ProductSection />
         <ProductSection1 />
-{/* //         <Slider />
-//         <ProductSection3 />
-//         <BestSellers /> */}
+         <Slider />
+         <ProductSection3 />
+{/* //         <BestSellers /> */}
       </main>
 
     </div>

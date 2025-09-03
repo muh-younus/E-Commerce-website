@@ -1,47 +1,51 @@
-// src/components/ProductSection2.js
 import React from 'react';
 import ProductBox from './ProductBox';
 
 const ProductSection1 = () => {
+  const products = [
+    {
+      title: 'Shop Deals in Fashion',
+      image: { src: 'https://thegadgetflow.com/wp-content/uploads/2020/12/Best-smart-home-gadgets-of-2020.jpeg', alt: 'Fashion Item' },
+      price: 49.99,
+      rating: 4.2,
+      linkText: 'See all deals',
+    },
+    {
+      title: 'Get Your Game On',
+      image: { src: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c2hvZXN8ZW58MHx8MHx8fDA%3D', alt: 'Gaming PC' },
+      price: 799.99,
+      rating: 4.7,
+      linkText: 'Shop gaming',
+    },
+    {
+      title: 'Small Gifts Under $20',
+      image: { src: 'https://img.freepik.com/free-photo/pink-model-career-kit-arrangement_23-2150083964.jpg?semt=ais_hybrid&w=740&q=80', alt: 'Gift' },
+      price: 19.99,
+      rating: 4.0,
+      linkText: 'Shop now',
+    },
+    {
+      title: 'New Home Arrivals Under $50',
+      image: { src: 'https://img.freepik.com/free-photo/modern-stationary-collection-arrangement_23-2149309643.jpg', alt: 'Home Decor' },
+      price: 39.99,
+      rating: 4.5,
+      linkText: 'Shop the latest from home',
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      {/* Fashion Deals */}
-      <ProductBox 
-        title="Shop deals in fashion"
-        images={[
-          { src: './pant.jpg', text: 'Jeans under $50' },
-          { src: './shirt.jpg', text: 'Tops under $25' },
-          { src: './scart.jpg', text: 'Scarves' }, // Assuming scart is scarf
-          { src: './shoes.jpg', text: 'Dresses under $30' }
-        ]}
-        linkText="See all deals"
-      />
-
-      {/* Gaming */}
-      <div className="bg-white p-4 shadow-md hover:shadow-lg transition duration-300">
-        <h3 className="font-bold mb-2">Get your game on</h3>
-        <img src="./pc1.jpg" alt="Gaming PC" className="w-full h-80 object-cover hover:scale-105 transition duration-300" />
-        <p className="text-blue-500 hover:underline mt-2 cursor-pointer">Shop gaming</p>
-      </div>
-
-      {/* Gifts */}
-      <div className="bg-white p-4 shadow-md hover:shadow-lg transition duration-300">
-        <h3 className="font-bold mb-2">Small gifts under $20</h3>
-        <img src="./amazon box.jpg" alt="Gift" className="w-full h-80 object-cover hover:scale-105 transition duration-300" />
-        <p className="text-blue-500 hover:underline mt-2 cursor-pointer">Shop now</p>
-      </div>
-
-      {/* New Home */}
-      <ProductBox 
-        title="New home arrivals under $50"
-        images={[
-          { src: './pot1.jpg', text: 'Kitchen & dining' },
-          { src: './tin.jpg', text: 'Home Improvement' },
-          { src: './spin.jpg', text: 'Decor' },
-          { src: './bath.jpg', text: 'Bedding & bath' }
-        ]}
-        linkText="Shop the latest from home"
-      />
+    <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 min-[360px]:gap-4 sm:gap-6 md:gap-8 p-3 min-[360px]:p-4 sm:p-6 md:p-8 bg-gradient-to-b from-teal-50 to-white mb-6 sm:mb-8 md:mb-12">
+      {products.map((product, idx) => (
+        <ProductBox
+          key={idx}
+          title={product.title}
+          image={product.image}
+          price={product.price}
+          rating={product.rating}
+          linkText={product.linkText}
+          className="hover:z-10"
+        />
+      ))}
     </div>
   );
 };
