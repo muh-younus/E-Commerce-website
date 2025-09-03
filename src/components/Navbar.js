@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-const Navbar = () => {
+const Navbar = ({ cartCount, toggleCart }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLanguage, setSelectedLanguage] = useState('EN');
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+
+  const languageRef = useRef(null);
+  const accountRef = useRef(null);
 
   const categories = ['All', 'Books', 'Electronics', 'Clothing', 'Home & Kitchen', 'Beauty', 'Toys'];
   const languages = [
@@ -18,6 +21,23 @@ const Navbar = () => {
     { code: 'DE', name: 'German' },
   ];
 
+  // Handle click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        languageRef.current &&
+        !languageRef.current.contains(event.target) &&
+        accountRef.current &&
+        !accountRef.current.contains(event.target)
+      ) {
+        setIsLanguageOpen(false);
+        setIsAccountOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -26,107 +46,170 @@ const Navbar = () => {
     }
   };
 
+  // Handle keyboard navigation for dropdowns
+  const handleKeyDown = (e, setOpen) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setOpen((prev) => !prev);
+    } else if (e.key === 'Escape') {
+      setIsLanguageOpen(false);
+      setIsAccountOpen(false);
+    }
+  };
+
   return (
-    <nav className="bg-teal-900 text-white p-4 flex items-center justify-between flex-wrap shadow-2xl sticky top-0 z-50">
-      {/* Logo */}
-      <div className="flex items-center px-4 py-2 group">
-        <div className="w-36 h-12 bg-[url('https://via.placeholder.com/144x48?text=Logo')] bg-contain bg-no-repeat transition-transform duration-300 group-hover:scale-105" />
-      </div>
+    <nav className="bg-teal-900 text-white sticky top-0 z-50 shadow-md">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
+        {/* Logo */}
+        <div className="flex items-center px-2 sm:px-4 py-2 group hover-scale transition-transform duration-300">
+          <img
+            src="https://graphicsfamily.com/wp-content/uploads/edd/2021/08/E-Commerce-Logo-Design-PNG.png"
+            alt="Logo"
+            className="h-10 sm:h-20 w-auto"
+          />
+        </div>
 
-      {/* Search Bar */}
-      <form
-        onSubmit={handleSearch}
-        className="flex-grow max-w-3xl mx-4 flex items-center bg-white text-gray-900 rounded-full overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl"
-      >
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="bg-gray-50 text-gray-800 p-3 rounded-l-full text-sm focus:outline-none focus:ring-2 focus:ring-coral-500 transition duration-200"
+        {/* Search Bar */}
+        <form
+          onSubmit={handleSearch}
+          className="flex-grow max-w-3xl w-full sm:w-auto flex items-center bg-white text-gray-900 rounded-full overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg"
+          role="search"
+          aria-label="Search products"
         >
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search products..."
-          className="flex-grow p-3 text-sm outline-none placeholder-gray-400 transition-all duration-200 focus:ring-2 focus:ring-coral-500"
-        />
-        <button
-          type="submit"
-          className="bg-coral-500 p-3 rounded-r-full hover:bg-coral-600 transition-all duration-300 flex items-center justify-center"
-        >
-          <i className="fas fa-search text-gray-800 transform transition-transform duration-300 hover:scale-110"></i>
-        </button>
-      </form>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="bg-gray-100 text-gray-800 p-2 sm:p-3 text-xs sm:text-sm rounded-l-full focus:outline-none focus:ring-2 focus:ring-yellow-400 transition duration-300"
+            aria-label="Select product category"
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search products..."
+            className="flex-grow p-2 sm:p-3 text-xs sm:text-sm outline-none placeholder-gray-400 transition-all duration-300 focus:ring-2 focus:ring-yellow-400"
+            aria-label="Search input"
+          />
+          <button
+            type="submit"
+            className="bg-yellow-400 p-2 sm:p-3 rounded-r-full hover:bg-yellow-500 transition-colors duration-300 flex items-center justify-center"
+            aria-label="Submit search"
+          >
+            <i className="fas fa-search text-gray-800 text-xs sm:text-sm hover-scale transition-transform duration-300"></i>
+          </button>
+        </form>
 
-      {/* Right Section */}
-      <div className="flex items-center space-x-6">
-        {/* Language Selector */}
-        <div
-          className="relative"
-          onMouseEnter={() => setIsLanguageOpen(true)}
-          onMouseLeave={() => setIsLanguageOpen(false)}
-        >
-          <div className="flex items-center px-4 py-2 rounded-lg transition-all duration-300 hover:bg-teal-800 group">
-            <i className="fas fa-globe text-teal-200 mr-2 transform transition-transform duration-300 group-hover:rotate-12"></i>
-            <span className="text-sm font-medium">{selectedLanguage}</span>
+        {/* Right Section */}
+        <div className="flex items-center space-x-2 sm:space-x-4 mt-2 sm:mt-0">
+          {/* Language Selector */}
+          <div
+            ref={languageRef}
+            className="relative"
+            onClick={() => {
+              setIsLanguageOpen((prev) => !prev);
+              setIsAccountOpen(false); // Close other dropdown
+            }}
+            onKeyDown={(e) => handleKeyDown(e, setIsLanguageOpen)}
+            tabIndex={0}
+            role="button"
+            aria-haspopup="true"
+            aria-expanded={isLanguageOpen}
+            aria-label="Language selector"
+          >
+            <div className="flex items-center px-2 sm:px-3 py-1 sm:py-2 rounded-lg transition-all duration-300 hover:bg-teal-800 group hover-scale">
+              <i className="fas fa-globe text-teal-200 mr-1 sm:mr-2 text-xs sm:text-sm transition-transform duration-300 group-hover:rotate-12"></i>
+              <span className="text-xs sm:text-sm font-medium">{selectedLanguage}</span>
+            </div>
+            {isLanguageOpen && (
+              <div className="absolute right-0 bg-teal-800 rounded-lg shadow-lg mt-1 sm:mt-2 z-20 w-32 sm:w-36 transition-all duration-300 opacity-100 transform translate-y-0">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setSelectedLanguage(lang.code);
+                      setIsLanguageOpen(false);
+                    }}
+                    className="block w-full text-left px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white hover:bg-teal-700 hover:pl-5 sm:hover:pl-6 transition-all duration-200"
+                    aria-label={`Select ${lang.name} language`}
+                  >
+                    {lang.name}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          {isLanguageOpen && (
-            <div className="absolute bg-teal-800 rounded-lg shadow-xl mt-2 z-10 w-36 animate-fade-in-down">
-              {languages.map((lang) => (
+
+          {/* Account */}
+          <div
+            ref={accountRef}
+            className="relative"
+            onClick={() => {
+              setIsAccountOpen((prev) => !prev);
+              setIsLanguageOpen(false); // Close other dropdown
+            }}
+            onKeyDown={(e) => handleKeyDown(e, setIsAccountOpen)}
+            tabIndex={0}
+            role="button"
+            aria-haspopup="true"
+            aria-expanded={isAccountOpen}
+            aria-label="Account menu"
+          >
+            <div className="flex items-center px-2 sm:px-3 py-1 sm:py-2 rounded-lg transition-all duration-300 hover:bg-teal-800 group hover-scale">
+              <i className="fas fa-user text-teal-200 mr-1 sm:mr-2 text-xs sm:text-sm transition-transform duration-300 group-hover:scale-110"></i>
+              <span className="text-xs sm:text-sm font-medium">Account</span>
+              <i className="fas fa-chevron-down ml-1 text-teal-200 text-xs sm:text-sm transition-transform duration-300 group-hover:rotate-180"></i>
+            </div>
+            {isAccountOpen && (
+              <div className="absolute right-0 bg-teal-800 rounded-lg shadow-lg mt-1 sm:mt-2 z-20 w-40 sm:w-48 transition-all duration-300 opacity-100 transform translate-y-0">
                 <button
-                  key={lang.code}
-                  onClick={() => {
-                    setSelectedLanguage(lang.code);
-                    setIsLanguageOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-teal-700 transition-all duration-200 hover:pl-6"
+                  className="block w-full text-left px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white hover:bg-teal-700 hover:pl-5 sm:hover:pl-6 transition-all duration-200"
+                  aria-label="View your profile"
                 >
-                  {lang.name}
+                  Your Profile
                 </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Account */}
-        <div
-          className="relative"
-          onMouseEnter={() => setIsAccountOpen(true)}
-          onMouseLeave={() => setIsAccountOpen(false)}
-        >
-          <div className="flex items-center px-4 py-2 rounded-lg transition-all duration-300 hover:bg-teal-800 group">
-            <i className="fas fa-user text-teal-200 mr-2 transform transition-transform duration-300 group-hover:scale-110"></i>
-            <span className="text-sm font-medium">Account</span>
-            <i className="fas fa-chevron-down ml-1 text-teal-200 transform transition-transform duration-300 group-hover:rotate-180"></i>
+                <button
+                  className="block w-full text-left px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white hover:bg-teal-700 hover:pl-5 sm:hover:pl-6 transition-all duration-200"
+                  aria-label="View your orders"
+                >
+                  Your Orders
+                </button>
+                <button
+                  className="block w-full text-left px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white hover:bg-teal-700 hover:pl-5 sm:hover:pl-6 transition-all duration-200"
+                  aria-label="View your wishlist"
+                >
+                  Wishlist
+                </button>
+                <button
+                  className="block w-full text-left px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm text-white hover:bg-teal-700 hover:pl-5 sm:hover:pl-6 transition-all duration-200"
+                  aria-label="Sign out"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
           </div>
-          {isAccountOpen && (
-            <div className="absolute bg-teal-800 rounded-lg shadow-xl mt-2 z-10 w-48 animate-fade-in-down">
-              <button className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-teal-700 transition-all duration-200 hover:pl-6">
-                Your Profile
-              </button>
-              <button className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-teal-700 transition-all duration-200 hover:pl-6">
-                Your Orders
-              </button>
-              <button className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-teal-700 transition-all duration-200 hover:pl-6">
-                Wishlist
-              </button>
-              <button className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-teal-700 transition-all duration-200 hover:pl-6">
-                Sign Out
-              </button>
-            </div>
-          )}
-        </div>
 
-        {/* Cart */}
-        <div className="flex items-center px-4 py-2 rounded-lg transition-all duration-300 hover:bg-teal-800 group">
-          <i className="fas fa-shopping-cart text-teal-200 mr-2 transform transition-transform duration-300 group-hover:scale-110"></i>
-          <span className="text-sm font-medium">Cart</span>
+          {/* Cart */}
+          <div
+            onClick={toggleCart}
+            className="flex items-center px-2 sm:px-3 py-1 sm:py-2 rounded-lg transition-all duration-300 hover:bg-teal-800 group hover-scale relative"
+            role="button"
+            aria-label={`View cart with ${cartCount} items`}
+          >
+            <i className="fas fa-shopping-cart text-teal-200 mr-1 sm:mr-2 text-xs sm:text-sm transition-transform duration-300 group-hover:scale-110"></i>
+            <span className="text-xs sm:text-sm font-medium">Cart</span>
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-yellow-400 text-gray-800 text-xs font-bold rounded-full h-4 sm:h-5 w-4 sm:w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </nav>

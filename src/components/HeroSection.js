@@ -42,25 +42,37 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative h-96 md:h-[500px] flex items-center justify-center overflow-hidden">
+    <div className="relative h-80 sm:h-96 md:h-[500px] flex items-center justify-center overflow-hidden">
       {/* Slides */}
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 ${slide.bg} flex items-center justify-center transition-opacity duration-500 ${
-            index === currentSlide ? 'opacity-100' : 'opacity-0'
+          className={`absolute inset-0 ${slide.bg} flex items-center justify-center transition-all duration-700 ease-in-out ${
+            index === currentSlide
+              ? 'opacity-100 translate-x-0'
+              : index < currentSlide
+              ? 'opacity-0 -translate-x-10'
+              : 'opacity-0 translate-x-10'
           }`}
         >
-          <div className="text-center text-white px-4">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 animate-fade-in-down">
+          <div className="text-center text-white px-4 sm:px-6">
+            <h1
+              className={`text-2xl sm:text-3xl md:text-5xl font-bold mb-3 sm:mb-4 transition-all duration-500 ease-in-out ${
+                index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
+            >
               {slide.headline}
             </h1>
-            <p className="text-lg md:text-xl mb-6 animate-fade-in-down delay-100">
+            <p
+              className={`text-base sm:text-lg md:text-xl mb-4 sm:mb-6 transition-all duration-500 ease-in-out delay-100 ${
+                index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
+            >
               {slide.subtext}
             </p>
             <a
               href="#"
-              className="inline-block bg-amber-500 text-white px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 hover:bg-amber-600 hover:ring-2 hover:ring-amber-300 hover:scale-105"
+              className="inline-block bg-amber-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all duration-300 hover:bg-amber-600 hover:ring-2 hover:ring-amber-300 hover:scale-105 animate-pulse-once"
             >
               {slide.cta}
             </a>
@@ -69,32 +81,37 @@ const HeroSection = () => {
       ))}
 
       {/* Navigation Arrows */}
-      <div className="absolute inset-y-0 left-4 flex items-center">
+      <div className="absolute inset-y-0 left-2 sm:left-4 flex items-center">
         <button
           onClick={goToPrevSlide}
-          className="bg-teal-800 bg-opacity-70 p-3 rounded-full text-white hover:bg-opacity-90 hover:ring-2 hover:ring-amber-300 transition-all duration-300 group"
+          className="bg-teal-800 bg-opacity-70 p-2 sm:p-3 rounded-full text-white hover:bg-opacity-90 hover:ring-2 hover:ring-amber-300 transition-all duration-300 group focus:outline-none"
+          aria-label="Previous slide"
         >
-          <i className="fas fa-chevron-left text-xl transform transition-transform duration-300 group-hover:scale-110"></i>
+          <i className="fas fa-chevron-left text-base sm:text-xl transform transition-transform duration-300 group-hover:scale-125"></i>
         </button>
       </div>
-      <div className="absolute inset-y-0 right-4 flex items-center">
+      <div className="absolute inset-y-0 right-2 sm:right-4 flex items-center">
         <button
           onClick={goToNextSlide}
-          className="bg-teal-800 bg-opacity-70 p-3 rounded-full text-white hover:bg-opacity-90 hover:ring-2 hover:ring-amber-300 transition-all duration-300 group"
+          className="bg-teal-800 bg-opacity-70 p-2 sm:p-3 rounded-full text-white hover:bg-opacity-90 hover:ring-2 hover:ring-amber-300 transition-all duration-300 group focus:outline-none"
+          aria-label="Next slide"
         >
-          <i className="fas fa-chevron-right text-xl transform transition-transform duration-300 group-hover:scale-110"></i>
+          <i className="fas fa-chevron-right text-base sm:text-xl transform transition-transform duration-300 group-hover:scale-125"></i>
         </button>
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-4 flex space-x-2">
+      <div className="absolute bottom-2 sm:bottom-4 flex space-x-1 sm:space-x-2">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-amber-500 scale-125' : 'bg-teal-200 opacity-50'
+            className={`w-2 sm:w-3 h-2 sm:h-3 rounded-full transition-all duration-300 ${
+              index === currentSlide
+                ? 'bg-amber-500 scale-150'
+                : 'bg-teal-200 opacity-50 hover:scale-110'
             }`}
+            aria-label={`Go to slide ${index + 1}`}
           ></button>
         ))}
       </div>

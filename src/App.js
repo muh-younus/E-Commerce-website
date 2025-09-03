@@ -7,22 +7,26 @@ import ProductSection from "./components/ProductSection"
 import ProductSection1 from './components/ProductSection1';
 import Slider from './components/Slider';
 import ProductSection3 from './components/ProductSection2';
-
+import Footer from './components/Footer';
+import BestSellers from './components/BestSeller';
 function App() {
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
       <header>
         <Navbar />
         <SubNavbar />
+        
       </header>
       <HeroSection />
+      <BestSellers />
         <main className="container mx-auto px-4 py-8">
         <ProductSection />
         <ProductSection1 />
          <Slider />
          <ProductSection3 />
-{/* //         <BestSellers /> */}
+        
       </main>
+      <Footer />
 
     </div>
   );

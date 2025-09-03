@@ -46,18 +46,21 @@ const ProductSection = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 p-8 bg-gradient-to-b from-teal-50 to-white mb-12">
-      {products.map((product, idx) => (
-        <ProductBox
-          key={idx}
-          title={product.title}
-          image={product.image}
-          price={product.price}
-          rating={product.rating}
-          linkText={product.linkText}
-          className="hover:z-10"
-        />
-      ))}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Featured Deals & Products</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 bg-gradient-to-b from-teal-50 to-white p-4 sm:p-8 rounded-lg">
+        {products.map((product, idx) => (
+          <ProductBox
+            key={idx}
+            title={product.title}
+            image={product.image}
+            price={product.price}
+            rating={product.rating}
+            linkText={product.linkText}
+            className="hover:z-10 hover-scale transition-transform duration-300"
+          />
+        ))}
+      </div>
     </div>
   );
 };
