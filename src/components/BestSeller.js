@@ -12,29 +12,85 @@ function BestSellers({ addToCart }) {
 
   return (
     <div className="mt-8 p-4">
-      <h2 className="text-xl font-bold mb-4 text-gray-900">Best Sellers in Computer & Accessories</h2>
+      <h2 className="text-xl font-bold mb-4 text-gray-900 animate-slideInFromLeft">Best Sellers in Computer & Accessories</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        {bestSellers.map((product) => (
+        {bestSellers.map((product, index) => (
           <div
             key={product.id}
-            className="bg-white p-4 rounded-lg shadow-lg hover-scale transition-transform duration-300"
+            className="bg-white p-4 rounded-lg shadow-lg transform transition-all duration-500 ease-out hover:bounce animate-slideIn"
+            style={{ animationDelay: `${index * 150}ms` }}
           >
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-32 object-cover rounded mb-2"
+              className="w-full h-32 object-cover rounded mb-2 transition-transform duration-300 hover:rotate-3"
             />
-            <h3 className="text-sm font-semibold text-gray-900">{product.name}</h3>
+            <h3 className="text-sm font-semibold text-gray-900 transition-colors duration-300 hover:text-blue-600">
+              {product.name}
+            </h3>
             <p className="text-gray-600 text-sm">${product.price.toFixed(2)}</p>
             <button
               onClick={() => addToCart(product)}
-              className="mt-2 text-yellow-400 hover:text-yellow-600 font-semibold transition-colors duration-300"
+              className="mt-2 text-yellow-400 font-semibold transition-all duration-300 hover:text-yellow-600 hover:pulse focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50"
             >
               Add to Cart
             </button>
           </div>
         ))}
       </div>
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        @keyframes slideInFromLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        @keyframes bounce {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        @keyframes pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+        }
+        .animate-slideIn {
+          animation: slideIn 0.6s ease-out forwards;
+        }
+        .animate-slideInFromLeft {
+          animation: slideInFromLeft 0.8s ease-out forwards;
+        }
+        .hover\\:bounce:hover {
+          animation: bounce 0.4s ease-in-out;
+        }
+        .hover\\:pulse:hover {
+          animation: pulse 0.3s ease-in-out;
+        }
+        .hover\\:rotate-3:hover {
+          transform: rotate(3deg);
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,21 +1,21 @@
 import React from 'react';
 
-const ProductBox = ({ title, image, price, rating, linkText, className = '' }) => {
+const ProductBox = ({ title, image, price, rating, linkText, description, className = '' }) => {
   const fallbackImage = 'https://via.placeholder.com/400x288?text=Product+Image';
 
   return (
     <div
-      className={`relative bg-gradient-to-br from-teal-50 to-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-103 w-full max-w-[90vw] 2xs:max-w-[20rem] xs:max-w-[22rem] sm:max-w-[24rem] md:max-w-[26rem] lg:max-w-[28rem] mx-auto overflow-hidden ${className}`}
+      className={`relative bg-gradient-to-br from-teal-50 to-white rounded-2xl shadow-xl hover:shadow-2xl hover:ring-4 hover:ring-amber-300 hover:scale-105 hover:rotate-1 transition-all duration-300 transform w-full max-w-[90vw] 2xs:max-w-[20rem] xs:max-w-[22rem] sm:max-w-[24rem] md:max-w-[26rem] lg:max-w-[28rem] mx-auto overflow-hidden group animate-slideInFromBottom ${className}`}
     >
       {/* Product Image */}
-      <div className="relative group h-[40vw] 2xs:h-[42vw] xs:h-[44vw] sm:h-[48vw] md:h-[50vw] lg:h-[18rem] max-h-72">
+      <div className="relative group-hover:image h-[40vw] 2xs:h-[42vw] xs:h-[44vw] sm:h-[48vw] md:h-[50vw] lg:h-[18rem] max-h-72">
         <img
           src={image?.src || fallbackImage}
           alt={image?.alt || 'Product'}
-          className="w-full h-full object-cover rounded-t-2xl transition-all duration-300 group-hover:scale-105 group-hover:ring-4 group-hover:ring-amber-300"
+          className="w-full h-full object-cover rounded-t-2xl transition-all duration-300 group-hover:image:scale-105 group-hover:image:ring-4 group-hover:image:ring-amber-300"
           onError={(e) => (e.target.src = fallbackImage)}
         />
-        <div className="absolute inset-0 bg-teal-900 opacity-0 group-hover:opacity-20 rounded-t-2xl transition-opacity duration-300"></div>
+        <div className="absolute inset-0 bg-teal-900 opacity-0 group-hover:image:opacity-20 rounded-t-2xl transition-opacity duration-300"></div>
       </div>
 
       {/* Content Overlay */}
@@ -41,14 +41,71 @@ const ProductBox = ({ title, image, price, rating, linkText, className = '' }) =
           </div>
           <span className="ml-1 2xs:ml-1.5 xs:ml-2 text-[0.65rem] 2xs:text-xs xs:text-xs sm:text-sm text-teal-200">{(rating || 0).toFixed(1)}</span>
         </div>
+        <p className="text-[0.65rem] 2xs:text-xs xs:text-sm sm:text-base md:text-sm text-teal-100 mb-1 2xs:mb-2 xs:mb-3 sm:mb-4 line-clamp-2 group-hover:animate-fadeInUp">{description || 'No description available'}</p>
         <p className="text-sm 2xs:text-base xs:text-lg sm:text-xl font-semibold text-white mb-1 2xs:mb-2 xs:mb-3 sm:mb-4">${(price || 0).toFixed(2)}</p>
         <a
-          href="#"
-          className="inline-block bg-amber-500 text-white px-2 2xs:px-3 xs:px-4 sm:px-6 py-1 xs:py-1.5 sm:py-2 rounded-full text-[0.65rem] 2xs:text-xs xs:text-xs sm:text-sm font-medium transition-all duration-300 hover:bg-amber-600 hover:ring-2 hover:ring-amber-300 hover:scale-105 animate-pulse-once"
+          href="/"
+          className="inline-block bg-amber-500 text-white px-2 2xs:px-3 xs:px-4 sm:px-6 py-1 xs:py-1.5 sm:py-2 rounded-full text-[0.65rem] 2xs:text-xs xs:text-xs sm:text-sm font-medium transition-all duration-300 hover:bg-amber-600 hover:ring-2 hover:ring-amber-300 hover:scale-105 animate-pulse"
         >
           {linkText || 'Shop Now'}
         </a>
       </div>
+
+      <style jsx>{`
+        @keyframes slideInFromBottom {
+          0% {
+            opacity: 0;
+            transform: translateY(50px);
+          }
+          80% {
+            opacity: 1;
+            transform: translateY(-5px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+        .animate-slideInFromBottom {
+          animation: slideInFromBottom 0.7s ease-out forwards;
+        }
+        .animate-fadeInUp {
+          animation: fadeInUp 0.4s ease-in forwards;
+        }
+        .animate-pulse {
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+        .hover\\:scale-105:hover {
+          transform: scale(1.05) rotate(1deg);
+        }
+        .group:hover .group-hover\\:image\\:scale-105 {
+          transform: scale(1.05);
+        }
+        .group:hover .group-hover\\:image\\:ring-4 {
+          ring: 4px solid #f59e0b;
+        }
+        .group:hover .group-hover\\:image\\:opacity-20 {
+          opacity: 0.2;
+        }
+      `}</style>
     </div>
   );
 };
